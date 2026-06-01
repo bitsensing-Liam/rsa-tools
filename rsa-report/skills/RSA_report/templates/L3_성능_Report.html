@@ -1,0 +1,366 @@
+<!-- REPORT-TEMPLATE
+  name: [L3] 성능 Report
+  desc: RSA Team L3 SW 성능 Test/검증 보고서. 4단 구성(Test Dataset / Final Performance / Test Conditions / Work Schedule). Confluence 업로드용.
+  naming: L3_{{YY.MM.DD}}_{{프로젝트명}}_Test.html
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>[L3]['{{YY.MM.DD}}] {{대상 SW}} 성능 Test 및 검증</title>
+<style>
+  :root {
+    --text: #172b4d;
+    --muted: #6b778c;
+    --border: #dfe1e6;
+    --bg-soft: #f4f5f7;
+    --bg-code: #f4f5f7;
+    --link: #0052cc;
+    --th-bg: #f4f5f7;
+    --quote-border: #4c9aff;
+    --quote-bg: #deebff33;
+    --highlight: #fdd0ec;
+    --danger: #bf2600;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: var(--text);
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 24px;
+    background: #fff;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 14px; font-weight: 600; margin: 18px 0 8px; color: #253858; }
+  p  { margin: 8px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    background: var(--bg-code);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-family: "SFMono-Regular", "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+  blockquote {
+    margin: 12px 0;
+    padding: 10px 16px;
+    border-left: 3px solid var(--quote-border);
+    background: var(--quote-bg);
+    color: #253858;
+    border-radius: 0 3px 3px 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: var(--th-bg); font-weight: 600; }
+  th.row-head { background: var(--th-bg); width: 260px; font-weight: 600; }
+  figure {
+    border: 1px dashed var(--border);
+    background: var(--bg-soft);
+    padding: 32px;
+    text-align: center;
+    color: var(--muted);
+    margin: 16px 0;
+    border-radius: 4px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  figure .caption { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .highlight { background: var(--highlight); padding: 2px 6px; border-radius: 3px; }
+  .danger { color: var(--danger); }
+  .meta-table th { width: 260px; }
+  .callout {
+    background: #DEEBFF;
+    border-left: 4px solid #0052CC;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 3px;
+  }
+  .callout.warn {
+    background: #FFFAE6;
+    border-left: 4px solid #FFAB00;
+  }
+  .callout.ok {
+    background: #E3FCEF;
+    border-left: 4px solid #00875A;
+  }
+  .callout.note {
+    background: #EAE6FF;
+    border-left: 4px solid #6554C0;
+  }
+  .kbd {
+    background: var(--bg-soft);
+    border: 1px solid #C1C7D0;
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    color: #253858;
+  }
+  .tag {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 1px 8px;
+    font-size: 12px;
+    margin-right: 4px;
+    font-weight: 600;
+  }
+  .tag.pass { background: #ABF5D1; color: #006644; }
+  .tag.fail { background: #FFBDAD; color: #BF2600; }
+  .meta-top {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  /* ---- Template helper styles (placeholder highlight; safe to keep on publish) ---- */
+  .ph {
+    background: #fff7d6;
+    border: 1px dashed #f5a623;
+    color: #7a4e00;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  L3 Performance Report template
+  --------------------------------------------------------------
+  How to use:
+   1. Copy this file to a new name (e.g. L3_YY.MM.DD_project_Test.html)
+   2. Replace each <span class="ph">{{...}}</span> with real content
+   3. Delete unused sections/rows; duplicate rows where needed
+   4. .ph highlight can stay on publish; remove the .ph class if it distracts
+  ============================================================ -->
+
+<h1>[L3]['<span class="ph">{{YY.MM.DD}}</span>] <span class="ph">{{대상 SW}}</span> 성능 Test 및 검증</h1>
+<div class="meta-top">
+  <strong>작성일</strong>: <span class="ph">{{YYYY-MM-DD}}</span> &nbsp;|&nbsp;
+  <strong>대상</strong>: <span class="ph">{{대상 SW / 모듈}}</span> &nbsp;|&nbsp;
+  <strong>작성자</strong>: <span class="ph">{{작성자}}</span> &nbsp;|&nbsp;
+  <strong>선행 보고서</strong>:
+  <a href="{{선행_보고서_URL}}"><span class="ph">{{선행 보고서 제목 (없으면 행 삭제)}}</span></a>
+</div>
+
+<div class="callout">
+  <p>
+    <strong>Report date:</strong> <span class="ph">{{YYYY-MM-DD}}</span> &nbsp;|&nbsp;
+    <strong>Session:</strong> <span class="ph">{{세션 요약 — 예: Total_top14 (highway aggregate, ~16.5 min, ~80 km/h mean)}}</span> &nbsp;|&nbsp;
+    <strong>SW HEAD:</strong> <code><span class="ph">{{commit hash}}</span></code>
+  </p>
+</div>
+
+<!-- ====================================================== -->
+<h2>1. Test Dataset</h2>
+<table class="meta-table">
+  <tbody>
+    <tr>
+      <th class="row-head">SimResult</th>
+      <td><code><span class="ph">{{SimResult 경로}}</span></code></td>
+    </tr>
+    <tr>
+      <th class="row-head">Logging</th>
+      <td><code><span class="ph">{{Logging .h5 경로}}</span></code></td>
+    </tr>
+    <tr>
+      <th class="row-head">Total scans</th>
+      <td><span class="ph">{{전체 scan 수}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">Scan period</th>
+      <td><span class="ph">{{예: 101.7 ms (~9.83 Hz, from rdi_header.timestamp)}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">Total duration</th>
+      <td><span class="ph">{{예: 992.2 s (16.5 min)}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">SW (HEAD)</th>
+      <td><code><span class="ph">{{commit / version}}</span></code></td>
+    </tr>
+    <tr>
+      <th class="row-head">Viewer / Tool</th>
+      <td><code><span class="ph">{{뷰어 / 분석 스크립트}}</span></code></td>
+    </tr>
+    <!-- 행 추가/삭제하여 사용 -->
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>2. Final Performance &mdash; <span class="ph">{{측정 대상 (예: Horizontal Auto-Alignment)}}</span></h2>
+
+<div class="callout ok">
+  <p>
+    <strong><span class="ph">{{핵심 지표명}}</span> (committed):</strong> <code><span class="ph">{{최종 값 + 단위}}</span></code> &nbsp;|&nbsp;
+    <strong>Estimation time:</strong> <code><span class="ph">{{예: 264.7 s (2,603 scans)}}</span></code> &nbsp;|&nbsp;
+    <strong><span class="ph">{{보조 지표 (예: Final-angle range Max-Min)}}</span>:</strong> <code><span class="ph">{{값}}</span></code>
+  </p>
+</div>
+
+<h3>2.1 Estimation time</h3>
+<table>
+  <thead>
+    <tr><th>Event</th><th>Scan</th><th>Time</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{이벤트 — 예: First per-scan value emitted}}</span></td>
+      <td><code><span class="ph">{{scan}}</span></code></td>
+      <td><code><span class="ph">{{time}}</span></code></td>
+    </tr>
+    <tr>
+      <td><span class="ph">{{이벤트 — 예: First committed value emitted}}</span></td>
+      <td><code><span class="ph">{{scan}}</span></code></td>
+      <td><code><span class="ph">{{time}}</span></code></td>
+    </tr>
+    <tr>
+      <td><span class="ph">{{조건 충족 프레임 비율 — 예: Straight-driving frames during warmup}}</span></td>
+      <td colspan="2"><span class="ph">{{예: 2,574 / 2,603 (98.9%)}}</span></td>
+    </tr>
+    <!-- 행 복제하여 사용 -->
+  </tbody>
+</table>
+
+<h3>2.2 <span class="ph">{{변동 지표 — 예: Final angle Max - Min}}</span></h3>
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th><span class="ph">{{지표 A — 예: Final (committed)}}</span></th>
+      <th><span class="ph">{{지표 B — 예: per-scan}}</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Max</td><td><code><span class="ph">{{값}}</span></code></td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>Min</td><td><code><span class="ph">{{값}}</span></code></td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>Max - Min</td><td><code><span class="ph">{{값}}</span></code></td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>Mean</td><td><span class="ph">{{값 / -}}</span></td><td><code><span class="ph">{{값}}</span></code></td></tr>
+  </tbody>
+</table>
+
+<h3>2.3 Cycle time (<code><span class="ph">{{지표 변수명}}</span></code>)</h3>
+<p><span class="ph">{{지표 정의 한두 문장 — 무엇을, 어디서, 어떻게 측정했는지}}</span></p>
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Value <span class="ph">{{[단위]}}</span></th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Count</td><td><span class="ph">{{값}}</span></td></tr>
+    <tr><td>Mean &plusmn; std</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>Min</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>p50</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>p95</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>p99</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+    <tr><td>Max</td><td><code><span class="ph">{{값}}</span></code></td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <p><span class="ph">{{지표 해석 / budget 대비 판정 — 예: median ~1.02 ms, well below the 10 ms budget}}</span></p>
+</div>
+
+<h3>2.4 <span class="ph">{{핵심 결과 그림 (예: angle vs scan, residual 등)}}</span></h3>
+<figure>
+  <div>[<span class="ph">{{대표 그림 설명}}</span>]</div>
+  <div class="caption"><span class="ph">{{파일명.png}}</span></div>
+</figure>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>3. Test Conditions</h2>
+
+<h3>3.1 <span class="ph">{{게이트 / 조건 이름 (예: Straight-Driving Gate)}}</span></h3>
+<p><span class="ph">{{측정 유효 조건 개요 — 어떤 조건에서만 값이 commit/측정되는지 한 문단}}</span></p>
+<table>
+  <thead>
+    <tr><th>Condition</th><th>Threshold</th><th>Source</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{조건명}}</span></td>
+      <td><span class="ph">{{임계값 + 단위}}</span></td>
+      <td><code><span class="ph">{{파일 / 상수명}}</span></code></td>
+    </tr>
+    <!-- 행 복제하여 사용 -->
+  </tbody>
+</table>
+
+<h3>3.2 Observed <span class="ph">{{관측 통계 대상 (예: Ego Statistics)}}</span> (this run)</h3>
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{지표명}}</span></td>
+      <td><code><span class="ph">{{값}}</span></code></td>
+    </tr>
+    <!-- 행 복제하여 사용 -->
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>4. Work Schedule and SW Version</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Type</th><th>Item</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code><span class="ph">{{YYYY-MM-DD}}</span></code></td>
+      <td><span class="ph">{{Pre-work / Milestone / Test start / Bugfix / Today}}</span></td>
+      <td><span class="ph">{{내용}}</span></td>
+    </tr>
+    <!-- 행 복제하여 사용 -->
+  </tbody>
+</table>
+
+<div class="callout note">
+  <p><strong>SW HEAD:</strong> <code><span class="ph">{{commit}}</span></code> on branch <code><span class="ph">{{branch}}</span></code> (<span class="ph">{{repo}}</span>).
+  Modules touched: <code><span class="ph">{{모듈 경로들}}</span></code>.</p>
+</div>
+
+</body>
+</html>

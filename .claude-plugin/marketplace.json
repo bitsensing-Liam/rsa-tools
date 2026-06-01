@@ -1,0 +1,17 @@
+{
+  "name": "bitsensing-rsa",
+  "owner": {
+    "name": "RSA Team",
+    "email": "tglee@bitsensing.com"
+  },
+  "metadata": {
+    "description": "bitsensing RSA Team 내부 Claude Code 플러그인 마켓플레이스"
+  },
+  "plugins": [
+    {
+      "name": "rsa-report",
+      "source": "./rsa-report",
+      "description": "RSA Team 표준 보고서 양식(HTML) 기반 문서 작성 스킬. L2/L3 개발·성능·외부업무 양식을 골라 placeholder를 채워 문서 생성."
+    }
+  ]
+}

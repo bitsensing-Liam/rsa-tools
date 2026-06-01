@@ -1,0 +1,507 @@
+<!-- REPORT-TEMPLATE
+  name: [L2] 개발 Report
+  desc: RSA Team L2 표준 5단 구성(요약/IO정의/개발내용/개발결과/ToDo) 개발 보고서. 개발 결과 지표는 로직/요구사항에 따라 가변. Confluence 업로드용.
+  naming: L2_{{YY.MM.DD}}_{{프로젝트명}}.html
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>[L2]['{{YY.MM.DD}}] {{문서 제목}}</title>
+<style>
+  :root {
+    --text: #172b4d;
+    --muted: #6b778c;
+    --border: #dfe1e6;
+    --bg-soft: #f4f5f7;
+    --bg-code: #f4f5f7;
+    --link: #0052cc;
+    --th-bg: #f4f5f7;
+    --quote-border: #4c9aff;
+    --quote-bg: #deebff33;
+    --highlight: #fdd0ec;
+    --danger: #bf2600;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: var(--text);
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 24px;
+    background: #fff;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 14px; font-weight: 600; margin: 18px 0 8px; color: #253858; }
+  p  { margin: 8px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    background: var(--bg-code);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-family: "SFMono-Regular", "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+  blockquote {
+    margin: 12px 0;
+    padding: 10px 16px;
+    border-left: 3px solid var(--quote-border);
+    background: var(--quote-bg);
+    color: #253858;
+    border-radius: 0 3px 3px 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: var(--th-bg); font-weight: 600; }
+  th.row-head { background: var(--th-bg); width: 220px; font-weight: 600; }
+  figure {
+    border: 1px dashed var(--border);
+    background: var(--bg-soft);
+    padding: 32px;
+    text-align: center;
+    color: var(--muted);
+    margin: 16px 0;
+    border-radius: 4px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  figure .caption { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .highlight { background: var(--highlight); padding: 2px 6px; border-radius: 3px; }
+  .danger { color: var(--danger); }
+  .meta-table th { width: 220px; }
+  .todo-box {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+  }
+  .todo-box ul { list-style: none; padding-left: 4px; }
+  .todo-box li::before {
+    content: "\2610 ";
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  .data-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    margin: 16px 0;
+  }
+  .flow-box {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    background: var(--bg-soft);
+    text-align: center;
+    font-size: 13px;
+  }
+  .flow-arrow { color: var(--muted); font-size: 20px; text-align: center; }
+  .formula {
+    background: var(--bg-soft);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-family: "SFMono-Regular", "Consolas", monospace;
+    margin: 8px 0;
+    color: #253858;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .callout {
+    background: #DEEBFF;
+    border-left: 4px solid #0052CC;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 3px;
+  }
+  .callout.warn {
+    background: #FFFAE6;
+    border-left: 4px solid #FFAB00;
+  }
+  .callout.ok {
+    background: #E3FCEF;
+    border-left: 4px solid #00875A;
+  }
+  .kbd {
+    background: var(--bg-soft);
+    border: 1px solid #C1C7D0;
+    border-bottom-width: 2px;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    color: #253858;
+  }
+  .tag {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 1px 8px;
+    font-size: 12px;
+    margin-right: 4px;
+    font-weight: 600;
+  }
+  .tag.done { background: #ABF5D1; color: #006644; }
+  .tag.progress { background: #B3D4FF; color: #0747A6; }
+  .tag.todo { background: #FFE2BD; color: #974F0C; }
+  .tag.p1 { background: #FFE2BD; color: #974F0C; }
+  .tag.p2 { background: #FFE2BD; color: #974F0C; }
+  .tag.p3 { background: #FFE2BD; color: #974F0C; }
+  .meta-top {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  /* ---- Template helper styles (placeholder highlight; removable before publish) ---- */
+  .ph {
+    background: #fff7d6;
+    border: 1px dashed #f5a623;
+    color: #7a4e00;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  L2 development report template
+  --------------------------------------------------------------
+  How to use:
+   1. Copy this file (e.g. L2_YY.MM.DD_project.html)
+   2. Replace every <span class="ph">{{...}}</span> with real content
+   3. Delete unused sections/rows; duplicate rows/items as needed
+   4. Section 4 (results) metrics vary by logic/requirements:
+      replace the example columns with the metrics that fit the
+      target algorithm. The Alignment columns shown are only an example.
+  ============================================================ -->
+
+<h1>[L2]['<span class="ph">{{YY.MM.DD}}</span>] <span class="ph">{{문서 제목 / 버전 / 주제}}</span></h1>
+<div class="meta-top">
+  <strong>작성일</strong>: <span class="ph">{{YYYY-MM-DD}}</span> &nbsp;|&nbsp;
+  <strong>대상</strong>: <span class="ph">{{대상 SW / 모듈 / HW}}</span> &nbsp;|&nbsp;
+  <strong>작성자</strong>: <span class="ph">{{작성자}}</span> &nbsp;|&nbsp;
+  <strong>선행 보고서</strong>:
+  <a href="{{선행_보고서_URL}}"><span class="ph">{{선행 보고서 제목 (없으면 행 삭제)}}</span></a>
+</div>
+
+<!-- ====================================================== -->
+<h2>1. 문서 요약 및 최종 결과</h2>
+<blockquote>
+  <p><span class="ph">{{이번 차수의 한두 문장 요약 - 무엇을 검증/구현/완료했는지, 어떤 산출물이 나왔는지}}</span></p>
+</blockquote>
+
+<table class="meta-table">
+  <tbody>
+    <tr>
+      <th class="row-head">목적</th>
+      <td><span class="ph">{{본 개발 / 검토의 궁극적 목적 (한 줄)}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">개발 범위</th>
+      <td><span class="ph">{{이번 차수에서 다룬 범위 - 단계 -> 단계 -> 단계 형태로 작성}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">개발 목표 (KPI)</th>
+      <td><span class="ph">{{정량 KPI - 예: GT 대비 평균 오차 1.0deg 이하}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">SW 위치</th>
+      <td><code><span class="ph">{{repo / 경로 / 핵심 파일들}}</span></code></td>
+    </tr>
+    <tr>
+      <th class="row-head">Working Period</th>
+      <td><span class="ph">{{YYYY-MM-DD ~ YYYY-MM-DD}}</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>최종 결과 요약</h3>
+<p>핵심 산출물</p>
+<ul>
+  <li><span class="ph">{{산출물 1}}</span></li>
+  <li><span class="ph">{{산출물 2}}</span></li>
+  <li><span class="ph">{{산출물 3}}</span></li>
+</ul>
+
+<div class="callout ok">
+  <strong>이번 차수의 의의</strong>: <span class="ph">{{이번 차수가 왜 의미 있는가 - 기존 대비 무엇이 개선/검증되었는가}}</span>
+</div>
+
+<figure>
+  <div>[<span class="ph">{{최종 결과 대표 그림 설명}}</span>]</div>
+  <div class="caption"><span class="ph">{{파일명.png}}</span></div>
+</figure>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>2. Input / Output / Data Flow 정의</h2>
+
+<h3>2.1. Input</h3>
+<table>
+  <thead>
+    <tr><th>항목</th><th>Type</th><th>내용</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{항목명}}</span></td>
+      <td><span class="ph">{{type}}</span></td>
+      <td><span class="ph">{{설명}}</span></td>
+      <td><span class="ph">{{비고}}</span></td>
+    </tr>
+    <!-- duplicate row -->
+  </tbody>
+</table>
+
+<h3>2.2. Output</h3>
+<table>
+  <thead>
+    <tr><th>항목</th><th>Type</th><th>내용</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{항목명}}</span></td>
+      <td><span class="ph">{{type}}</span></td>
+      <td><span class="ph">{{설명}}</span></td>
+      <td><span class="ph">{{비고}}</span></td>
+    </tr>
+    <!-- duplicate row -->
+  </tbody>
+</table>
+
+<h3>2.3. Data Flow</h3>
+<blockquote>
+  <p>모델 / 가정 - <span class="ph">{{알고리즘이 따르는 핵심 수식 또는 가정. 없으면 본 blockquote 삭제}}</span></p>
+</blockquote>
+<div class="formula"><span class="ph">{{핵심 수식. 없으면 .formula div 삭제}}</span></div>
+
+<p>파이프라인:</p>
+<ol>
+  <li><span class="ph">{{단계 1 - 입력 추출 / 필터링}}</span></li>
+  <li><span class="ph">{{단계 2 - 게이팅 / 마스킹}}</span></li>
+  <li><span class="ph">{{단계 3 - 핵심 알고리즘}}</span></li>
+  <li><span class="ph">{{단계 4 - 누적 / 결합}}</span></li>
+  <li><span class="ph">{{단계 5 - 출력 산출}}</span></li>
+</ol>
+
+<div class="data-flow">
+  <div class="flow-box"><strong>Input</strong><br><span class="ph">{{입력 설명}}</span></div>
+  <div class="flow-arrow">-&gt;</div>
+  <div class="flow-box"><strong><span class="ph">{{Stage 1}}</span></strong><br><span class="ph">{{설명}}</span></div>
+  <div class="flow-arrow">-&gt;</div>
+  <div class="flow-box"><strong><span class="ph">{{Stage 2}}</span></strong><br><span class="ph">{{설명}}</span></div>
+</div>
+<div class="data-flow">
+  <div class="flow-box"><strong><span class="ph">{{Stage 3}}</span></strong><br><span class="ph">{{설명}}</span></div>
+  <div class="flow-arrow">-&gt;</div>
+  <div class="flow-box"><strong><span class="ph">{{Stage 4}}</span></strong><br><span class="ph">{{설명}}</span></div>
+  <div class="flow-arrow">-&gt;</div>
+  <div class="flow-box"><strong>Output</strong><br><span class="ph">{{출력 설명}}</span></div>
+</div>
+
+<div class="callout warn">
+  <strong><span class="ph">{{설계 결정 / 주의사항 제목}}</span></strong>: <span class="ph">{{왜 이렇게 설계했는지, 어떤 효과가 있는지}}</span>
+</div>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>3. 개발 내용</h2>
+
+<h3>3.1. 진행 내용</h3>
+<ul>
+  <li><span class="tag done">DONE</span> <span class="ph">{{완료된 항목}}</span></li>
+  <li><span class="tag progress">in progress</span> <span class="ph">{{진행 중 항목}}</span></li>
+  <li><span class="tag todo">to do</span> <span class="ph">{{예정 항목}}</span></li>
+</ul>
+
+<h3>3.2. 기본 Concept / 알고리즘 설명</h3>
+<figure>
+  <div>[<span class="ph">{{Concept 다이어그램 설명}}</span>]</div>
+  <div class="caption"><span class="ph">{{concept.svg 또는 png}}</span></div>
+</figure>
+<blockquote>
+  <p><span class="ph">{{알고리즘의 핵심 아이디어 한 문단}}</span></p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr><th>단계</th><th>처리</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>(1) <span class="ph">{{단계명}}</span></strong></td>
+      <td><span class="ph">{{처리 내용}}</span></td>
+    </tr>
+    <tr>
+      <td><strong>(2) <span class="ph">{{단계명}}</span></strong></td>
+      <td><span class="ph">{{처리 내용}}</span></td>
+    </tr>
+    <tr>
+      <td><strong>(3) <span class="ph">{{단계명}}</span></strong></td>
+      <td><span class="ph">{{처리 내용}}</span></td>
+    </tr>
+    <tr>
+      <td><strong>(4) <span class="ph">{{단계명}}</span></strong></td>
+      <td><span class="ph">{{처리 내용}}</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>3.2.1. 기존 대비 장점 (해당 시)</h4>
+<ul>
+  <li><strong><span class="ph">{{장점 1 키워드}}</span></strong>: <span class="ph">{{설명}}</span></li>
+  <li><strong><span class="ph">{{장점 2 키워드}}</span></strong>: <span class="ph">{{설명}}</span></li>
+</ul>
+
+<h3>3.3. <span class="ph">{{서브 토픽 (예: 직진/Static-left 게이트, GUI 모듈 구성 등)}}</span></h3>
+<table>
+  <thead>
+    <tr><th>모듈 / 항목</th><th>역할 / 설명</th><th>비고 / 단축키</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code><span class="ph">{{이름}}</span></code></td>
+      <td><span class="ph">{{설명}}</span></td>
+      <td><span class="kbd"><span class="ph">{{키 / 비고}}</span></span></td>
+    </tr>
+    <!-- duplicate row -->
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>4. 개발 결과</h2>
+
+<!-- NOTE: result metrics vary by logic/requirements. Replace the example
+     columns below with the metrics that fit the target algorithm.
+     The Alignment columns (GT/Mean/Std/|Mean-GT|/KPI) are only an example. -->
+<div class="callout warn">
+  <strong>결과 지표 정의</strong>: 결과 표의 컬럼(지표)은 로직 / 요구사항에 따라 달라짐.
+  아래 컬럼은 <strong>예시</strong>이며, 작성 대상 알고리즘에 맞는 지표로 교체.
+  (예: Alignment <span class="ph">{{GT / Mean / Std / |Mean-GT| / KPI 판정}}</span>,
+  Detection <span class="ph">{{Precision / Recall / F1 등}}</span>)
+</div>
+
+<h3>4.1. 결과 요약 (지표 표)</h3>
+<table>
+  <thead>
+    <tr>
+      <th><span class="ph">{{대상 / 케이스}}</span></th>
+      <th><span class="ph">{{지표 1}}</span></th>
+      <th><span class="ph">{{지표 2}}</span></th>
+      <th><span class="ph">{{지표 3}}</span></th>
+      <th><span class="ph">{{판정 / 기준}}</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{Pass/Fail}}</span></td>
+    </tr>
+    <!-- 컬럼 / 행 모두 로직에 맞게 추가-삭제 -->
+  </tbody>
+</table>
+
+<h3>4.2. 상세 결과 (조건별 / 세션별)</h3>
+<table>
+  <thead>
+    <tr>
+      <th><span class="ph">{{식별자 (Session / Case 등)}}</span></th>
+      <th><span class="ph">{{지표 1}}</span></th>
+      <th><span class="ph">{{지표 2}}</span></th>
+      <th><span class="ph">{{보조 지표}}</span></th>
+      <th>비고</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{식별자}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{값}}</span></td>
+      <td><span class="ph">{{비고}}</span></td>
+    </tr>
+    <!-- duplicate row -->
+  </tbody>
+</table>
+
+<h3>4.3. <span class="ph">{{핵심 결과 그림 (예: overlay, fit curve, 잔차, PR curve 등)}}</span></h3>
+<figure>
+  <div>[<span class="ph">{{그림 설명}}</span>]</div>
+  <div class="caption"><span class="ph">{{파일명.png}}</span></div>
+</figure>
+
+<h3>4.4. <span class="ph">{{비교 / 분석 (예: sweep table 정합, 파라미터 영향 등)}}</span></h3>
+<p><span class="ph">{{분석 내용 / 비교 표 또는 그래프}}</span></p>
+
+<div class="callout ok">
+  <span class="ph">{{핵심 관찰 / 결론 한두 문장}}</span>
+</div>
+
+<h3>4.5. 결론</h3>
+<ul>
+  <li><strong><span class="ph">{{결론 1 핵심 키워드}}</span></strong> - <span class="ph">{{근거와 의의}}</span></li>
+  <li><strong><span class="ph">{{결론 2 핵심 키워드}}</span></strong> - <span class="ph">{{근거와 의의}}</span></li>
+  <li><strong><span class="ph">{{결론 3 핵심 키워드}}</span></strong> - <span class="ph">{{근거와 의의}}</span></li>
+</ul>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2>5. To Do List</h2>
+<div class="todo-box">
+  <ul>
+    <li><span class="tag p1">P1</span> <strong><span class="ph">{{최우선 항목 제목}}</span></strong> - <span class="ph">{{내용 / 이유}}</span></li>
+    <li><span class="tag p2">P2</span> <strong><span class="ph">{{차순위 항목 제목}}</span></strong> - <span class="ph">{{내용}}</span></li>
+    <li><span class="tag p3">P3</span> <strong><span class="ph">{{후순위 항목 제목}}</span></strong> - <span class="ph">{{내용}}</span></li>
+    <!-- duplicate item as needed; plain list without priority tags is also fine -->
+  </ul>
+</div>
+
+<div class="meta-top" style="margin-top: 40px; text-align: right;">
+  - <span class="ph">{{팀 / 작성자 / YYYY.MM.DD}}</span>
+</div>
+
+</body>
+</html>
