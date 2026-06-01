@@ -4,16 +4,23 @@ RSA Team 내부에서 사용하는 Claude Code 플러그인 모음입니다.
 
 ## 설치 방법 (팀원용)
 
-Claude Code 에서 아래 두 명령만 실행하면 됩니다.
+Claude Code 에서 아래 두 명령을 순서대로 실행하면 됩니다. (각 명령 우측의 복사 버튼으로 한 줄씩 복사하세요.)
+
+1. 마켓플레이스 추가
 
 ```
 /plugin marketplace add bitsensing-Liam/rsa-tools
+```
+
+2. 플러그인 설치
+
+```
 /plugin install rsa-report@bitsensing-rsa
 ```
 
 또는 `/plugin` 만 입력해 인터랙티브 UI 에서 마켓플레이스를 추가하고 설치할 수 있습니다.
 
-설치 후 Claude Code 를 재시작하면 `/RSA_report` 또는 "보고서 써줘" 등으로 스킬이 동작합니다.
+설치가 완료되면 `exit` 로 Claude Code 를 종료한 뒤 다시 접속해 주세요. 재접속하면 `/RSA_report` 또는 "보고서 써줘" 등으로 스킬이 동작합니다.
 
 ## 포함 플러그인
 
