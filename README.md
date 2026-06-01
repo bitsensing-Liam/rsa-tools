@@ -7,7 +7,7 @@ RSA Team 내부에서 사용하는 Claude Code 플러그인 모음입니다.
 Claude Code 에서 아래 두 명령만 실행하면 됩니다.
 
 ```
-/plugin marketplace add <이 레포의 git URL 또는 org/repo>
+/plugin marketplace add bitsensing-Liam/rsa-tools
 /plugin install rsa-report@bitsensing-rsa
 ```
 
