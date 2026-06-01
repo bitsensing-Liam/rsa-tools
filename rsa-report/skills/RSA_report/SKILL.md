@@ -15,24 +15,31 @@ description: >
 
 ## 절차
 
-### 1. 양식 스캔 + 선택 (속도 우선)
-**스캔과 메타 읽기는 단일 명령 1회로 끝내고, 곧바로 선택 메뉴를 띄운다.**
-메뉴를 띄우기 전에 템플릿 파일을 편집하거나, 본문을 읽거나, 다른 확인 작업을
-하지 않는다 (사용자가 메뉴까지 기다리는 시간을 최소화).
+### 1. 양식 선택 (즉시 — 도구 호출 없이)
+**아래 `양식 카탈로그`는 이 SKILL.md 안에 있고, `/RSA_report` 호출 시 이미 모델
+컨텍스트에 로드되어 있다. 따라서 파일을 스캔하거나 읽지 말고, 곧바로
+`AskUserQuestion` 으로 카탈로그의 양식들을 제시한다 (label=name, description=desc).**
+도구 왕복을 1회 줄여 선택 메뉴가 즉시 뜨게 하는 것이 핵심이다. 메뉴를 띄우기 전에
+어떤 파일도 읽거나 편집하지 않는다.
 
-권장 단일 명령 (각 양식의 메타 주석 첫머리만 한 번에 읽음). 양식은 이 플러그인
-내부에 동봉되며, `${CLAUDE_PLUGIN_ROOT}` 가 플러그인 설치 루트를 가리킨다(자동 설정):
+선택된 양식의 `file` 을 기억해 3단계에서 해당 HTML 만 읽는다.
+양식이 1개뿐이면 그것을 쓰되 한 번만 확인한다.
+
+#### 양식 카탈로그
+| file | name | desc | naming |
+|---|---|---|---|
+| `L2_개발_Report.html` | [L2] 개발 Report | RSA Team L2 표준 5단 구성(요약/IO정의/개발내용/개발결과/ToDo) 개발 보고서. 개발 결과 지표는 로직/요구사항에 따라 가변. Confluence 업로드용. | `L2_{{YY.MM.DD}}_{{프로젝트명}}.html` |
+| `L3_개발_Report.html` | [L3] 개발 Report | RSA Team L3 표준 6단 구성(요약/데이터취득/IO정의/개발내용/개발결과/ToDo) 개발 보고서. 개발 결과 지표는 로직/요구사항에 따라 가변. Confluence 업로드용. | `L3_{{YY.MM.DD}}_{{프로젝트명}}.html` |
+| `L3_성능_Report.html` | [L3] 성능 Report | RSA Team L3 SW 성능 Test/검증 보고서. 4단 구성(Test Dataset / Final Performance / Test Conditions / Work Schedule). Confluence 업로드용. | `L3_{{YY.MM.DD}}_{{프로젝트명}}_Test.html` |
+
+(이 카탈로그가 실제 `templates/` 폴더와 어긋나 보일 때 — 예: 사용자가 "방금 추가한
+양식이 안 보인다" 고 하면 — **그때만** 아래 명령으로 스캔해 보정한다. 평상시에는
+스캔하지 않는다. `${CLAUDE_PLUGIN_ROOT}` 가 플러그인 설치 루트다(자동 설정):
 
     for f in "${CLAUDE_PLUGIN_ROOT}/skills/RSA_report/templates/"*.html; do echo "### $f"; head -n 5 "$f"; done
 
-(만약 `${CLAUDE_PLUGIN_ROOT}` 가 비어 있으면 SKILL.md 가 있는 폴더 기준
-`templates/` 를 직접 사용한다. Windows 에서는 Glob 도구로
-`**/skills/RSA_report/templates/*.html` 를 찾아도 된다.)
-
-각 파일 맨 위 `<!-- REPORT-TEMPLATE ... -->` 주석의 `name` / `desc` / `naming`을
-파싱한다. 주석이 없으면 파일명으로 이름을 추정한다.
-바로 `AskUserQuestion` 으로 양식들을 제시한다 (label=name, description=desc).
-양식이 1개뿐이면 그것을 쓰되 한 번만 확인한다.
+`${CLAUDE_PLUGIN_ROOT}` 가 비어 있으면 Glob 도구로
+`**/skills/RSA_report/templates/*.html` 를 찾는다.)
 
 ### 2. 추가 입력 확인 (skip 가능)
 양식 선택 직후, `AskUserQuestion` 으로 "추가로 문서에 반영할 내용/자료가
@@ -75,16 +82,28 @@ placeholder를 실제 값으로 치환해 완성한다.
 저장한 절대경로를 사용자에게 알린다.
 
 ## 양식 추가 방법 (사용자 안내용)
-`templates/` 폴더에 HTML 파일을 넣으면 자동으로 선택지에 등장한다.
-파일 맨 위에 아래 주석을 달면 목록에 이름/설명이 예쁘게 표시된다(선택):
+양식 1개를 추가/수정/삭제할 때는 아래 3가지를 **한 commit 에서 같이** 처리한다.
+(선택 메뉴는 위 `양식 카탈로그` 표만 보므로, 표를 갱신하지 않으면 새 양식이
+메뉴에 안 나온다.)
 
-    <!-- REPORT-TEMPLATE
-      name: 표시될 양식 이름
-      desc: 한 줄 설명
-      naming: 파일명규칙_{{YY.MM.DD}}.html
-    -->
+1. `templates/` 폴더에 HTML 파일을 넣는다. 파일 맨 위에 아래 주석을 단다
+   (자가 문서화 + 카탈로그가 깨졌을 때의 스캔 보정용):
 
-채울 자리는 본문 어디든 `{{항목명}}` 으로 표시한다.
+        <!-- REPORT-TEMPLATE
+          name: 표시될 양식 이름
+          desc: 한 줄 설명
+          naming: 파일명규칙_{{YY.MM.DD}}.html
+        -->
+
+   채울 자리는 본문 어디든 `{{항목명}}` 으로 표시한다.
+
+2. **위 `### 1. 양식 선택` 의 `양식 카탈로그` 표에 행을 추가**한다
+   (file / name / desc / naming). 이게 메뉴에 바로 반영되는 부분이다.
+
+3. `.claude-plugin/plugin.json` 의 `version` 을 올린다(예: 1.0.0 -> 1.0.1).
+   버전이 그대로면 팀원의 `/plugin` 업데이트가 변경을 못 받을 수 있다.
+
+세 가지를 commit & push 하면, 팀원은 `/plugin` 에서 업데이트로 받는다.
 
 ## 규칙
 - 소스/HTML 주석은 ASCII만 사용(non-ASCII 주석 금지). 본문 한국어는 무방.

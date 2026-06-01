@@ -1,6 +1,6 @@
 {
   "name": "rsa-report",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "RSA Team 표준 보고서 양식(HTML) 기반 문서 작성 스킬. 양식 목록에서 골라 {{...}} placeholder를 채워 현재 작업 폴더에 HTML 문서를 생성하고, 필요 시 Confluence 업로드까지 지원.",
   "author": {
     "name": "Liam",
