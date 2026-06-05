@@ -31,6 +31,7 @@ description: >
 | `L2_개발_Report.html` | [L2] 개발 Report | RSA Team L2 표준 5단 구성(요약/IO정의/개발내용/개발결과/ToDo) 개발 보고서. 개발 결과 지표는 로직/요구사항에 따라 가변. Confluence 업로드용. | `L2_{{YY.MM.DD}}_{{프로젝트명}}.html` |
 | `L3_개발_Report.html` | [L3] 개발 Report | RSA Team L3 표준 6단 구성(요약/데이터취득/IO정의/개발내용/개발결과/ToDo) 개발 보고서. 개발 결과 지표는 로직/요구사항에 따라 가변. Confluence 업로드용. | `L3_{{YY.MM.DD}}_{{프로젝트명}}.html` |
 | `L3_성능_Report.html` | [L3] 성능 Report | RSA Team L3 SW 성능 Test/검증 보고서. 4단 구성(Test Dataset / Final Performance / Test Conditions / Work Schedule). Confluence 업로드용. | `L3_{{YY.MM.DD}}_{{프로젝트명}}_Test.html` |
+| `회의록_Minutes.html` | [General] Meeting Minutes | RSA Team 회의록. 회의록 로그(누적 표) + 개별 회의록(개요/안건/논의/결정사항/액션아이템/다음회의) 구성. Confluence 업로드용. | `Minutes_{{YY.MM.DD}}_{{회의명}}.html` |
 
 (이 카탈로그가 실제 `templates/` 폴더와 어긋나 보일 때 — 예: 사용자가 "방금 추가한
 양식이 안 보인다" 고 하면 — **그때만** 아래 명령으로 스캔해 보정한다. 평상시에는

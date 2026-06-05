@@ -1,0 +1,266 @@
+<!-- REPORT-TEMPLATE
+  name: [General] Meeting Minutes
+  desc: RSA Team 회의록. 회의록 로그(누적 표) + 개별 회의록(개요/안건/논의/결정사항/액션아이템/다음회의) 구성. Confluence 업로드용.
+  naming: Minutes_{{YY.MM.DD}}_{{회의명}}.html
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>[회의록]['{{YY.MM.DD}}] {{회의명}}</title>
+<style>
+  :root {
+    --text: #172b4d;
+    --muted: #6b778c;
+    --border: #dfe1e6;
+    --bg-soft: #f4f5f7;
+    --bg-code: #f4f5f7;
+    --link: #0052cc;
+    --th-bg: #f4f5f7;
+    --quote-border: #4c9aff;
+    --quote-bg: #deebff33;
+    --highlight: #fdd0ec;
+    --danger: #bf2600;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: var(--text);
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 24px;
+    background: #fff;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 14px; font-weight: 600; margin: 18px 0 8px; color: #253858; }
+  p  { margin: 8px 0; }
+  ul, ol { margin: 8px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    background: var(--bg-code);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+  blockquote {
+    margin: 12px 0;
+    padding: 10px 16px;
+    border-left: 3px solid var(--quote-border);
+    background: var(--quote-bg);
+    color: #253858;
+    border-radius: 0 3px 3px 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th { background: var(--th-bg); font-weight: 600; }
+  th.row-head { background: var(--th-bg); width: 140px; font-weight: 600; }
+  .highlight { background: var(--highlight); padding: 2px 6px; border-radius: 3px; }
+  .danger { color: var(--danger); }
+  .meta-top {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .callout {
+    background: #DEEBFF;
+    border-left: 4px solid #0052CC;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 3px;
+  }
+  .callout.warn { background: #FFFAE6; border-left: 4px solid #FFAB00; }
+  .callout.ok   { background: #E3FCEF; border-left: 4px solid #00875A; }
+  /* status pills (Confluence status macro look-alike) */
+  .status {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .status.green   { background: #ABF5D1; color: #006644; }
+  .status.yellow  { background: #FFF0B3; color: #974F0C; }
+  .status.blue    { background: #B3D4FF; color: #0747A6; }
+  .status.neutral { background: #DFE1E6; color: #42526E; }
+  .status.red     { background: #FFBDAD; color: #BF2600; }
+  /* decision / action lists */
+  .decision-list { list-style: none; padding-left: 4px; }
+  .decision-list li::before { content: "\2611 "; color: #00875A; margin-right: 4px; }
+  .decision-list li.undecided::before { content: "\2610 "; color: var(--muted); }
+  /* ---- Template helper styles (placeholder highlight; removable before publish) ---- */
+  .ph {
+    background: #fff7d6;
+    border: 1px dashed #f5a623;
+    color: #7a4e00;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  Meeting minutes template
+  --------------------------------------------------------------
+  How to use:
+   1. Copy this file (e.g. Minutes_YY.MM.DD_meeting.html)
+   2. Replace every <span class="ph">{{...}}</span> with real content
+   3. "Meeting log" is a cumulative table - add one row per meeting
+   4. Copy the "Individual minutes" block per meeting; split into a
+      child page when it grows large
+   5. Delete unused sections/rows; duplicate rows/items as needed
+  ============================================================ -->
+
+<h1>[회의록] <span class="ph">{{프로젝트 / 페이지 제목 (예: [App][AFI920] Meeting Minutes)}}</span></h1>
+<div class="meta-top">
+  <strong>작성자</strong>: <span class="ph">{{작성자}}</span> &nbsp;|&nbsp;
+  <strong>최종 수정</strong>: <span class="ph">{{YYYY-MM-DD}}</span>
+</div>
+
+<div class="callout">
+  관련 회의 내역을 정리하는 페이지. 새 회의가 생기면 <strong>회의록 로그</strong>에 한 줄 추가하고,
+  상세 내용은 아래 <strong>개별 회의록</strong> 블록을 복사해 작성.
+</div>
+
+<!-- ====================================================== -->
+<h2>회의록 로그</h2>
+<table>
+  <thead>
+    <tr>
+      <th>날짜</th>
+      <th>시간</th>
+      <th>참석자</th>
+      <th>주요 안건 / 내용</th>
+      <th>상태</th>
+      <th>상세</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{YYYY-MM-DD}}</span></td>
+      <td><span class="ph">{{HH:MM ~ HH:MM}}</span></td>
+      <td><span class="ph">{{참석자}}</span></td>
+      <td><span class="ph">{{안건 요약}}</span></td>
+      <td><span class="status green">진행중</span></td>
+      <td><a href="#m1"><span class="ph">{{링크}}</span></a></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td><td></td>
+      <td><span class="status neutral">대기</span></td>
+      <td></td>
+    </tr>
+    <!-- duplicate row per meeting -->
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ====================================================== -->
+<h2 id="m1">개별 회의록 - <span class="ph">{{회의명 / 회차}}</span></h2>
+
+<h3>회의 개요</h3>
+<table>
+  <tbody>
+    <tr>
+      <th class="row-head">회의명</th>
+      <td><span class="ph">{{예: Radar App 주간 회의 #1}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">일시</th>
+      <td><span class="ph">{{YYYY-MM-DD (요일) HH:MM ~ HH:MM}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">장소</th>
+      <td><span class="ph">{{회의실 / 온라인 링크}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">참석자</th>
+      <td><span class="ph">{{홍길동, 김철수, 이영희}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">불참자</th>
+      <td><span class="ph">{{- (없으면 행 삭제)}}</span></td>
+    </tr>
+    <tr>
+      <th class="row-head">작성자</th>
+      <td><span class="ph">{{작성자}}</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>안건 (Agenda)</h3>
+<ol>
+  <li><span class="ph">{{안건 1}}</span></li>
+  <li><span class="ph">{{안건 2}}</span></li>
+  <li><span class="ph">{{안건 3}}</span></li>
+</ol>
+
+<h3>논의 내용</h3>
+<ul>
+  <li><span class="ph">{{주요 논의 사항}}</span></li>
+  <li><span class="ph">{{논의 사항}}</span></li>
+</ul>
+
+<h3>결정 사항</h3>
+<ul class="decision-list">
+  <li><span class="ph">{{결정된 사항}}</span></li>
+  <li class="undecided"><span class="ph">{{추후 결정 필요 사항}}</span></li>
+</ul>
+
+<h3>액션 아이템</h3>
+<table>
+  <thead>
+    <tr><th>할 일</th><th>담당자</th><th>마감일</th><th>상태</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="ph">{{작업}}</span></td>
+      <td><span class="ph">{{담당자}}</span></td>
+      <td><span class="ph">{{YYYY-MM-DD}}</span></td>
+      <td><span class="status yellow">진행중</span></td>
+    </tr>
+    <tr>
+      <td></td><td></td><td></td>
+      <td><span class="status neutral">대기</span></td>
+    </tr>
+    <!-- duplicate row per action item -->
+  </tbody>
+</table>
+
+<h3>다음 회의 / 비고</h3>
+<ul>
+  <li>다음 회의 일정: <span class="ph">{{YYYY-MM-DD HH:MM}}</span></li>
+  <li>기타: <span class="ph">{{비고}}</span></li>
+</ul>
+
+<div class="meta-top" style="margin-top: 40px; text-align: right;">
+  - <span class="ph">{{팀 / 작성자 / YYYY.MM.DD}}</span>
+</div>
+
+</body>
+</html>
